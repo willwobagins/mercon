@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animasi Bola Kecil Berjalan dan Terpecah</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            overflow: hidden;
+            position: relative;
+        }
+        .bola {
+            width: 0.5vw; /* Ukuran bola diubah menjadi setengah lebih kecil */
+            height: 0.5vw; /* Ukuran bola diubah menjadi setengah lebih kecil */
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            animation: moveUp 2s forwards;
+        }
+
+        @keyframes moveUp {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-80vh);
+            }
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .partikel {
+            position: absolute;
+            width: 1vw; /* Ukuran partikel tetap sama */
+            height: 1vw; /* Ukuran partikel tetap sama */
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 1s forwards;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0) scale(1);
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+            }
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .social-media {
+            margin-top: 5px;
+        }
+
+        .social-media a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        function getRandomColor() {
+            const colors = ['blue', 'green', 'yellow'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function createBola() {
+            const bola = document.createElement('div');
+            bola.className = 'bola';
+
+            const bolaColor = getRandomColor(); // Simpan warna bola
+            bola.style.backgroundColor = bolaColor;
+
+            const randomX = Math.random() * (window.innerWidth - (2 * window.innerWidth / 100)); // Memastikan bola tetap dalam batas layar
+            bola.style.left = `${randomX}px`;
+
+            document.body.appendChild(bola);
+
+            bola.addEventListener('animationend', () => {
+                const bolaRect = bola.getBoundingClientRect();
+                const bolaX = bolaRect.left + bolaRect.width / 2;
+                const bolaY = bolaRect.top + bolaRect.height / 2;
+
+                bola.style.animation = 'explode 0.1s forwards';
+
+                bola.addEventListener('animationend', () => {
+                    for (let i = 0; i < 100; i++) {
+                        const partikel = document.createElement('div');
+                        partikel.className = 'partikel';
+
+                        // Set warna partikel sesuai warna bola
+                        partikel.style.backgroundColor = bolaColor;
+
+                        const angle = Math.random() * 2 * Math.PI;
+                        const radius = Math.random() * 100;
+                        const x = Math.cos(angle) * radius;
+                        const y = Math.sin(angle) * radius;
+
+                        partikel.style.setProperty('--x', `${x}px`);
+                        partikel.style.setProperty('--y', `${y}px`);
+                        partikel.style.left = `${bolaX}px`;
+                        partikel.style.top = `${bolaY}px`;
+
+                        document.body.appendChild(partikel);
+
+                        partikel.addEventListener('animationend', () => {
+                            partikel.remove();
+                        });
+                    }
+                });
+            });
+
+            setTimeout(() => {
+                bola.style.animation = 'moveUp 2s forwards'; 
+            }, 10);
+        }
+
+        setInterval(createBola, 1000);
+    </script>
+
+    <footer>
+        &copy; 2024 Teguh Tri Wibowo. All Rights Reserved. <br>
+        <div class="social-media">
+            <a href="https://github.com/willwobagins" target="_blank">Github</a>
+            <a href="https://willwobagins.github.io/My_Portfolio/" target="_blank">My Portfolio</a>
+        </div>
+    </footer>
+
+</body>
+</html>
