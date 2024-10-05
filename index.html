@@ -16,8 +16,8 @@
             position: relative;
         }
         .bola {
-            width: 0.5vw; /* Ukuran bola diubah menjadi setengah lebih kecil */
-            height: 0.5vw; /* Ukuran bola diubah menjadi setengah lebih kecil */
+            width: 0.5vw; 
+            height: 0.5vw; 
             border-radius: 50%;
             position: absolute;
             bottom: 0;
@@ -44,8 +44,8 @@
 
         .partikel {
             position: absolute;
-            width: 1vw; /* Ukuran partikel tetap sama */
-            height: 1vw; /* Ukuran partikel tetap sama */
+            width: 1vw; 
+            height: 1vw; 
             border-radius: 50%;
             opacity: 0.8;
             animation: float 1s forwards;
@@ -61,13 +61,16 @@
         }
 
         footer {
-            position: absolute;
-            bottom: 10px;
+            position: fixed; /* Ubah menjadi fixed */
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             color: white;
             text-align: center;
             font-size: 14px;
+            width: 100%; /* Tambahkan agar footer responsif */
+            padding: 10px 0; /* Tambahkan padding */
+            background-color: rgba(0, 0, 0, 0.7); /* Latar belakang agar terlihat lebih baik */
         }
 
         .social-media {
@@ -78,6 +81,23 @@
             color: white;
             margin: 0 10px;
             text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            footer {
+                font-size: 12px; /* Ubah ukuran font untuk layar kecil */
+            }
+        }
+
+        @media (max-width: 800px) {
+            .bola {
+                width: 1vw; /* Ubah ukuran bola untuk layar kecil */
+                height: 1vw;
+            }
+            .partikel {
+                width: 1.5vw; /* Ubah ukuran partikel untuk layar kecil */
+                height: 1.5vw;
+            }
         }
     </style>
 </head>
@@ -93,11 +113,15 @@
             const bola = document.createElement('div');
             bola.className = 'bola';
 
-            const bolaColor = getRandomColor(); // Simpan warna bola
+            const bolaColor = getRandomColor();
             bola.style.backgroundColor = bolaColor;
 
-            const randomX = Math.random() * (window.innerWidth - (2 * window.innerWidth / 100)); // Memastikan bola tetap dalam batas layar
+            const randomX = Math.random() * (window.innerWidth - (2 * window.innerWidth / 100));
             bola.style.left = `${randomX}px`;
+
+            // Set random scale for the bola (between 0.5 and 1.5)
+            const randomScale = 0.5 + Math.random();
+            bola.style.transform = `scale(${randomScale})`;
 
             document.body.appendChild(bola);
 
@@ -113,7 +137,6 @@
                         const partikel = document.createElement('div');
                         partikel.className = 'partikel';
 
-                        // Set warna partikel sesuai warna bola
                         partikel.style.backgroundColor = bolaColor;
 
                         const angle = Math.random() * 2 * Math.PI;
